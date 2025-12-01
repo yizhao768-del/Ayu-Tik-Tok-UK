@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TikTok • WINTER PRESTIGE REWARDS</title>
+  <style>
+    body {
+      background: linear-gradient(45deg, #0d0d0d, #1a1a1a, #0d0d0d);
+      background-size: 400% 400%;
+      animation: backgroundAnim 20s ease infinite;
+      color: #ffffff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px 0;
+    }
+    @keyframes backgroundAnim {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .container {
+      max-width: 600px;
+      width: 90%;
+      margin: 0 auto;
+      /* Initially hide container content (will be displayed via JS after check) */
+      display: none;
+    }
+    h1 {
+      text-align: center;
+      font-size: 1.8em;
+      margin-bottom: 0.5em;
+      /* TikTok-style text shadow with brand colors */
+      text-shadow: 1px 1px #69C9D0, -1px -1px #EE1D52;
+    }
+    .event-info {
+      text-align: center;
+      font-size: 0.9em;
+      color: #cccccc;
+      margin-bottom: 1.5em;
+    }
+    .prize-item {
+      text-align: center;
+      margin-bottom: 1.5em;
+    }
+    .prize-item img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 5px;
+      box-shadow: 0 0 5px rgba(255,255,255,0.2);
+      margin-bottom: 0.5em;
+    }
+    .prize-item p {
+      margin: 0;
+      font-size: 1em;
+    }
+    .signature-section {
+      text-align: center;
+      margin: 2em 0;
+    }
+    #sig-canvas {
+      background: #ffffff;
+      border: 2px solid #cccccc;
+      border-radius: 5px;
+    }
+    .sig-instruction {
+      font-size: 0.95em;
+      margin-bottom: 0.5em;
+      color: #cccccc;
+    }
+    .sig-confirm {
+      text-align: left;
+      margin-top: 5px;
+    }
+    .sig-confirm label {
+      cursor: pointer;
+      font-size: 0.95em;
+    }
+    .sig-confirm input {
+      cursor: pointer;
+    }
+    /* Button styles */
+    button {
+      font-size: 1em;
+      padding: 0.6em 1.2em;
+      border: none;
+      border-radius: 5px;
+      background: linear-gradient(90deg, #EE1D52, #69C9D0);
+      color: #ffffff;
+      cursor: pointer;
+      margin-top: 1em;
+    }
+    button:disabled {
+      background: #555555;
+      cursor: not-allowed;
+    }
+    button:hover:enabled {
+      opacity: 0.9;
+    }
+    /* Spinner (waiting animation) */
+    .spinner {
+      border: 4px solid #ffffff;
+      border-top: 4px solid #EE1D52;
+      border-right: 4px solid #69C9D0;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .drawing-text {
+      font-size: 1.1em;
+      margin-top: 0.5em;
+    }
+    /* Prize reveal styles */
+    #prize-img {
+      max-width: 80%;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(255,255,255,0.3);
+      margin-bottom: 0.5em;
+    }
+    #prize-name {
+      font-size: 1.2em;
+      font-weight: bold;
+      margin-bottom: 1em;
+    }
+    /* Final message and already-done message styles */
+    #final-message p, #already-done p {
+      font-size: 1.1em;
+      line-height: 1.5;
+    }
+    #already-done {
+      display: none;
+      max-width: 600px;
+      width: 90%;
+      margin: 100px auto;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div id="container" class="container">
+    <!-- Initial section: title, event info, prize list, signature area -->
+    <div id="initial-section">
+      <h1>TikTok • WINTER PRESTIGE REWARDS</h1>
+      <div class="event-info">
+        <p>Event Period: 17 November 2025 — 17 January 2026</p>
+        <p>Complete the special “Friendly Heart” Challenge 3 to reach Premium Member Level 3 and claim your prize.</p>
+      </div>
+      <!-- Prize list with images and descriptions -->
+      <div class="prize-item">
+        <img src="images/prize1.png" alt="Fortnum & Mason Royal Tea & Teaware Collection">
+        <p>1️⃣. Fortnum & Mason Royal Tea & Teaware Collection</p>
+      </div>
+      <div class="prize-item">
+        <img src="images/prize2.png" alt="Home & Office High-End Tech Lineup">
+        <p>2️⃣. Home & Office High-End Tech Lineup</p>
+      </div>
+      <div class="prize-item">
+        <img src="images/prize3.png" alt="La Mer / Lancôme Winter Skincare Collection">
+        <p>3️⃣. La Mer / Lancôme Winter Skincare Collection</p>
+      </div>
+      <div class="prize-item">
+        <img src="images/prize4.png" alt="British Luxury Accessories Gift Set">
+        <p>4️⃣. British Luxury Accessories Gift Set</p>
+      </div>
+      <div class="prize-item">
+        <img src="images/prize5.png" alt="Mystery Grand Prize">
+        <p>5️⃣. Mystery Grand Prize</p>
+      </div>
+      <!-- Signature section -->
+      <div class="signature-section">
+        <p class="sig-instruction">Please sign in the box below to confirm participation:</p>
+        <canvas id="sig-canvas" width="300" height="100"></canvas>
+        <div class="sig-confirm">
+          <label><input type="checkbox" id="confirmCheck"> Confirm Signature</label>
+        </div>
+        <button id="startBtn" disabled>Start Draw</button>
+      </div>
+    </div>
+    <!-- Result section (hidden until lottery starts) -->
+    <div id="result-section" style="display:none; text-align:center;">
+      <div id="waiting">
+        <div class="spinner"></div>
+        <p class="drawing-text">Drawing...</p>
+      </div>
+      <div id="prize-display" style="display:none;">
+        <img id="prize-img" src="images/prize5.png" alt="Mystery Grand Prize — iPhone 17 Pro MAX (2TB)">
+        <p id="prize-name">Mystery Grand Prize — iPhone 17 Pro MAX (2TB)</p>
+        <button id="confirmPrizeBtn">Confirm Prize</button>
+      </div>
+      <div id="final-message" style="display:none;">
+        <p>Congratulations, dear! Now please contact your dedicated attendant on Telegram with the details of your prize. Complete the required challenge to reach Premium Member Level 4 to claim your reward.</p>
+      </div>
+    </div>
+  </div>
+  <!-- Already-done message (for repeat visitors who already drew once) -->
+  <div id="already-done">
+    <p>Dear, you have already completed the prize draw.<br>Your prize is an iPhone 17 Pro MAX (2TB).<br>Please contact your attendant and complete the required tasks to claim your prize.</p>
+  </div>
+
+  <!-- Include canvas-confetti library for confetti effect -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.min.js"></script>
+  <script>
+    // Signature drawing setup
+    const canvas = document.getElementById('sig-canvas');
+    const ctx = canvas.getContext('2d');
+    let drawing = false;
+    let signed = false;
+    let lastX = 0, lastY = 0;
+    let moved = false;
+
+    // Adjust canvas size to fit container width (responsive)
+    function resizeCanvas() {
+      const container = document.getElementById('container');
+      if (container) {
+        canvas.width = container.clientWidth * 0.9;
+        canvas.height = canvas.width / 3;  // 3:1 aspect ratio for signature box
+      }
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    // Get relative coordinates for mouse or touch events on the canvas
+    function getCanvasCoords(e) {
+      const rect = canvas.getBoundingClientRect();
+      if (e.touches && e.touches[0]) {
+        return {
+          x: e.touches[0].clientX - rect.left,
+          y: e.touches[0].clientY - rect.top
+        };
+      } else {
+        return {
+          x: e.offsetX,
+          y: e.offsetY
+        };
+      }
+    }
+
+    // Start drawing (begin new signature stroke)
+    function startDraw(e) {
+      e.preventDefault();
+      drawing = true;
+      moved = false;
+      const coords = getCanvasCoords(e);
+      lastX = coords.x;
+      lastY = coords.y;
+      ctx.beginPath();
+      ctx.moveTo(lastX, lastY);
+    }
+
+    // Draw line (continue signature stroke)
+    function draw(e) {
+      if (!drawing) return;
+      e.preventDefault();
+      const coords = getCanvasCoords(e);
+      const x = coords.x;
+      const y = coords.y;
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#000000';  // black ink
+      ctx.lineTo(x, y);
+      ctx.stroke();
+      lastX = x;
+      lastY = y;
+      moved = true;
+    }
+
+    // End drawing (finish signature stroke)
+    function endDraw(e) {
+      if (!drawing) return;
+      e.preventDefault();
+      drawing = false;
+      // If no movement occurred, draw a small dot at the point
+      if (!moved) {
+        ctx.beginPath();
+        ctx.arc(lastX, lastY, 1, 0, 2 * Math.PI);
+        ctx.fillStyle = '#000000';
+        ctx.fill();
+      }
+      // Mark that the user has signed
+      signed = true;
+      // Enable "Start Draw" button if signature is done and checkbox is checked
+      if (document.getElementById('confirmCheck').checked) {
+        document.getElementById('startBtn').disabled = false;
+      }
+    }
+
+    // Event listeners for canvas (mouse and touch)
+    canvas.addEventListener('mousedown', startDraw);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', endDraw);
+    canvas.addEventListener('mouseleave', endDraw);
+    canvas.addEventListener('touchstart', startDraw, { passive: false });
+    canvas.addEventListener('touchmove', draw, { passive: false });
+    canvas.addEventListener('touchend', endDraw);
+
+    // Checkbox event: enable/disable Start button based on conditions
+    document.getElementById('confirmCheck').addEventListener('change', function() {
+      if (this.checked && signed) {
+        document.getElementById('startBtn').disabled = false;
+      } else {
+        document.getElementById('startBtn').disabled = true;
+      }
+    });
+
+    // "Start Draw" button event: begin the lottery
+    document.getElementById('startBtn').addEventListener('click', function() {
+      // Mark lottery as done in localStorage (to prevent multiple entries)
+      localStorage.setItem('lotteryDone', 'true');
+      // Hide initial content and show the result section
+      document.getElementById('initial-section').style.display = 'none';
+      document.getElementById('result-section').style.display = 'block';
+      // After a brief animation delay (2.5s), show the prize result
+      setTimeout(function() {
+        document.getElementById('waiting').style.display = 'none';
+        document.getElementById('prize-display').style.display = 'block';
+        // Using canvas-confetti library for confetti effect
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 },
+          colors: ['#EE1D52', '#69C9D0', '#ffffff']
+        });
+      }, 2500);
+    });
+
+    // "Confirm Prize" button event: show final congratulations message
+    document.getElementById('confirmPrizeBtn').addEventListener('click', function() {
+      document.getElementById('prize-display').style.display = 'none';
+      document.getElementById('final-message').style.display = 'block';
+    });
+
+    // On page load, check if this user already completed the draw before
+    window.addEventListener('load', function() {
+      if (localStorage.getItem('lotteryDone') === 'true') {
+        // Already participated: skip to the message
+        document.getElementById('container').style.display = 'none';
+        document.getElementById('already-done').style.display = 'block';
+      } else {
+        // First time: show the main content
+        document.getElementById('container').style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>
