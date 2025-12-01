@@ -2,349 +2,975 @@
 <html lang="en-GB">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TikTok • WINTER PRESTIGE REWARDS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
-      background: linear-gradient(45deg, #0d0d0d, #1a1a1a, #0d0d0d);
-      background-size: 400% 400%;
-      animation: backgroundAnim 20s ease infinite;
-      color: #ffffff;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 20px 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      colour: #ffffff;
+      overflow-x: hidden;
+      background: radial-gradient(circle at top, #181c32 0, #050611 55%, #020308 100%);
     }
-    @keyframes backgroundAnim {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+
+    /* ===== 动态科技感背景 ===== */
+    .bg-layer {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      z-index: -2;
+      pointer-events: none;
     }
-    .container {
-      max-width: 600px;
-      width: 90%;
-      margin: 0 auto;
-      /* Initially hide container content (will be displayed via JS after check) */
-      display: none;
-    }
-    h1 {
-      text-align: center;
-      font-size: 1.8em;
-      margin-bottom: 0.5em;
-      /* TikTok-style text shadow with brand colors */
-      text-shadow: 1px 1px #69C9D0, -1px -1px #EE1D52;
-    }
-    .event-info {
-      text-align: center;
-      font-size: 0.9em;
-      color: #cccccc;
-      margin-bottom: 1.5em;
-    }
-    .prize-item {
-      text-align: center;
-      margin-bottom: 1.5em;
-    }
-    .prize-item img {
-      max-width: 100%;
-      height: auto;
-      border-radius: 5px;
-      box-shadow: 0 0 5px rgba(255,255,255,0.2);
-      margin-bottom: 0.5em;
-    }
-    .prize-item p {
-      margin: 0;
-      font-size: 1em;
-    }
-    .signature-section {
-      text-align: center;
-      margin: 2em 0;
-    }
-    #sig-canvas {
-      background: #ffffff;
-      border: 2px solid #cccccc;
-      border-radius: 5px;
-    }
-    .sig-instruction {
-      font-size: 0.95em;
-      margin-bottom: 0.5em;
-      color: #cccccc;
-    }
-    .sig-confirm {
-      text-align: left;
-      margin-top: 5px;
-    }
-    .sig-confirm label {
-      cursor: pointer;
-      font-size: 0.95em;
-    }
-    .sig-confirm input {
-      cursor: pointer;
-    }
-    /* Button styles */
-    button {
-      font-size: 1em;
-      padding: 0.6em 1.2em;
-      border: none;
-      border-radius: 5px;
-      background: linear-gradient(90deg, #EE1D52, #69C9D0);
-      color: #ffffff;
-      cursor: pointer;
-      margin-top: 1em;
-    }
-    button:disabled {
-      background: #555555;
-      cursor: not-allowed;
-    }
-    button:hover:enabled {
-      opacity: 0.9;
-    }
-    /* Spinner (waiting animation) */
-    .spinner {
-      border: 4px solid #ffffff;
-      border-top: 4px solid #EE1D52;
-      border-right: 4px solid #69C9D0;
+
+    .orb {
+      position: absolute;
+      width: 260px;
+      height: 260px;
       border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      animation: spin 1s linear infinite;
-      margin: 20px auto;
+      filter: blur(4px);
+      opacity: 0.85;
+      animation: floatOrb 18s ease-in-out infinite alternate;
     }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+
+    .orb--pink {
+      background: radial-gradient(circle, #fe2c55 0%, rgba(254, 44, 85, 0) 65%);
+      top: -60px;
+      left: -40px;
     }
-    .drawing-text {
-      font-size: 1.1em;
-      margin-top: 0.5em;
+
+    .orb--cyan {
+      background: radial-gradient(circle, #25f4ee 0%, rgba(37, 244, 238, 0) 65%);
+      bottom: -100px;
+      right: -80px;
+      animation-duration: 22s;
     }
-    /* Prize reveal styles */
-    #prize-img {
-      max-width: 80%;
-      height: auto;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(255,255,255,0.3);
-      margin-bottom: 0.5em;
+
+    .orb--white {
+      background: radial-gradient(circle, #ffffff 0%, rgba(255, 255, 255, 0) 70%);
+      top: 40%;
+      left: 60%;
+      animation-duration: 26s;
     }
-    #prize-name {
-      font-size: 1.2em;
-      font-weight: bold;
-      margin-bottom: 1em;
+
+    @keyframes floatOrb {
+      0%   { transform: translate3d(0, 0, 0) scale(1); }
+      50%  { transform: translate3d(40px, -30px, 0) scale(1.05); }
+      100% { transform: translate3d(-30px, 40px, 0) scale(1.1); }
     }
-    /* Final message and already-done message styles */
-    #final-message p, #already-done p {
-      font-size: 1.1em;
-      line-height: 1.5;
+
+    .grid {
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 38px 38px;
+      mix-blend-mode: soft-light;
+      opacity: 0.4;
+      animation: driftGrid 40s linear infinite;
+      z-index: -1;
+      pointer-events: none;
     }
-    #already-done {
+
+    @keyframes driftGrid {
+      0%   { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(-80px, -80px, 0); }
+    }
+
+    .scanline {
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.07) 0,
+        rgba(255,255,255,0.07) 1px,
+        transparent 1px,
+        transparent 4px
+      );
+      mix-blend-mode: soft-light;
+      opacity: 0.22;
+      animation: scan 5s linear infinite;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    @keyframes scan {
+      0%   { background-position: 0 0; }
+      100% { background-position: 0 120px; }
+    }
+
+    /* ===== 主卡片布局 ===== */
+    .outer {
+      min-height: 100vh;
+      display: flex;
+      align-items: centre;
+      justify-content: centre;
+      padding: 18px 10px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 720px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(7,9,20,0.96), rgba(18,20,38,0.98));
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.04),
+        0 30px 80px rgba(0,0,0,0.9);
+      padding: 18px 16px 22px;
+      position: relative;
+      overflow: hidden;
+      colour: #f5f5ff;
+      backdrop-filter: blur(18px);
+      animation: cardIn 0.7s ease-out;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(254,44,85,0.26), transparent 60%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .card-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    @keyframes cardIn {
+      from { opacity: 0; transform: translate3d(0, 18px, 0); }
+      to   { opacity: 1; transform: translate3d(0, 0, 0); }
+    }
+
+    /* ===== 头部 ===== */
+    .header {
+      text-align: centre;
+      margin-bottom: 16px;
+    }
+
+    .logo-pill {
+      display: inline-flex;
+      align-items: centre;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.6);
+      border: 1px solid rgba(255,255,255,0.18);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      colour: #e2e4ff;
+      margin-bottom: 6px;
+    }
+
+    .logo-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #fe2c55, #25f4ee);
+      box-shadow: 0 0 10px rgba(254,44,85,0.9);
+    }
+
+    .title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      margin-bottom: 3px;
+      text-shadow: 0 0 12px rgba(0,0,0,0.9);
+    }
+
+    .title span.dot {
+      colour: #fe2c55;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      colour: #cfd3f7;
+    }
+
+    /* ===== step 切换 ===== */
+    .step {
       display: none;
-      max-width: 600px;
-      width: 90%;
-      margin: 100px auto;
-      text-align: center;
+    }
+    .step.active {
+      display: block;
+    }
+
+    /* ===== 奖品区域 ===== */
+    .prize-grid {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+      margin-bottom: 10px;
+    }
+
+    @media (min-width: 640px) {
+      .prize-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .prize-card {
+      background: radial-gradient(circle at top, rgba(255,255,255,0.05), rgba(10,12,28,0.98));
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 9px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .prize-card[data-index="5️⃣"] {
+      grid-column: 1 / -1;
+    }
+
+    .prize-index {
+      position: absolute;
+      top: 6px;
+      right: 9px;
+      font-size: 0.85rem;
+      opacity: 0.5;
+    }
+
+    .prize-title {
+      font-size: 0.92rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .prize-image-wrap {
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.09);
+    }
+
+    .prize-image {
+      display: block;
+      width: 100%;
+      height: auto;
+      transform: scale(1.02);
+      transition: transform 0.9s ease-out;
+    }
+
+    .prize-card:hover .prize-image {
+      transform: scale(1.07);
+    }
+
+    .prize-note {
+      margin-top: 5px;
+      font-size: 0.78rem;
+      colour: #b5bcf2;
+      display: flex;
+      align-items: centre;
+      gap: 6px;
+    }
+
+    .note-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #25f4ee;
+      box-shadow: 0 0 6px rgba(37,244,238,0.9);
+    }
+
+    .event-info {
+      margin-top: 8px;
+      font-size: 0.8rem;
+      colour: #aeb3e4;
+      text-align: centre;
+    }
+
+    /* ===== 签名区域 ===== */
+    .signature-block {
+      margin-top: 14px;
+      padding: 12px 11px 14px;
+      border-radius: 16px;
+      background: radial-gradient(circle at top left, rgba(37,244,238,0.25), rgba(3,4,15,0.96));
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+
+    .sig-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .sig-help {
+      font-size: 0.8rem;
+      colour: #cfd5ff;
+      margin-bottom: 8px;
+    }
+
+    #signaturePad {
+      width: 100%;
+      height: 150px;
+      border-radius: 10px;
+      background: #ffffff;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,0.08);
+      touch-action: none;
+    }
+
+    .sig-footer {
+      margin-top: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: centre;
+      gap: 8px;
+      font-size: 0.8rem;
+    }
+
+    .confirm-area {
+      display: flex;
+      align-items: centre;
+      gap: 6px;
+      colour: #e4e6ff;
+    }
+
+    .confirm-area input {
+      width: 16px;
+      height: 16px;
+      accent-colour: #fe2c55;
+      cursor: pointer;
+    }
+
+    .clear-btn {
+      border: none;
+      background: transparent;
+      colour: #a4aad9;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .clear-btn:hover {
+      colour: #ffffff;
+    }
+
+    .primary-btn {
+      margin-top: 12px;
+      width: 100%;
+      border-radius: 999px;
+      padding: 9px 16px;
+      border: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: linear-gradient(120deg, #fe2c55, #25f4ee);
+      colour: #ffffff;
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.2),
+        0 10px 22px rgba(0,0,0,0.95);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      animation: pulseBtn 1.7s ease-in-out infinite;
+    }
+
+    .primary-btn::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg,
+        rgba(255,255,255,0.3),
+        transparent,
+        rgba(255,255,255,0.3));
+      opacity: 0;
+      transform: translateX(-80%);
+      pointer-events: none;
+    }
+
+    .primary-btn:hover::before {
+      opacity: 1;
+      animation: shimmer 1.2s linear;
+    }
+
+    @keyframes shimmer {
+      0%   { transform: translateX(-80%); }
+      100% { transform: translateX(80%); }
+    }
+
+    @keyframes pulseBtn {
+      0%,100% { box-shadow: 0 10px 22px rgba(0,0,0,0.95); }
+      50%     { box-shadow: 0 14px 28px rgba(0,0,0,1); }
+    }
+
+    .primary-btn:disabled {
+      background: linear-gradient(120deg, #3c4060, #252740);
+      opacity: 0.6;
+      box-shadow: none;
+      cursor: not-allowed;
+      animation: none;
+    }
+
+    .foot-note {
+      margin-top: 8px;
+      font-size: 0.78rem;
+      text-align: centre;
+      colour: #a9afd6;
+    }
+
+    /* ===== 抽奖等待页 ===== */
+    .draw-screen {
+      padding: 18px 4px 6px;
+      text-align: centre;
+    }
+
+    .draw-spinner-wrap {
+      margin: 10px auto 16px;
+      width: 90px;
+      height: 90px;
+      position: relative;
+    }
+
+    .ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 3px solid rgba(255,255,255,0.12);
+      border-top-colour: #fe2c55;
+      animation: spin 1.6s linear infinite;
+    }
+
+    .ring.r2 {
+      inset: 10px;
+      border-top-colour: #25f4ee;
+      border-bottom-colour: rgba(37,244,238,0.5);
+      animation-duration: 2.1s;
+      animation-direction: reverse;
+    }
+
+    .ring.r3 {
+      inset: 20px;
+      border-top-colour: #ffffff;
+      border-left-colour: rgba(255,255,255,0.5);
+      animation-duration: 2.6s;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    .draw-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .draw-sub {
+      font-size: 0.88rem;
+      colour: #cfd3f7;
+    }
+
+    .dot-loader {
+      display: flex;
+      justify-content: centre;
+      gap: 6px;
+      margin-top: 14px;
+    }
+
+    .dot-loader span {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #fe2c55;
+      animation: bounceDot 1s infinite ease-in-out;
+    }
+
+    .dot-loader span:nth-child(2) {
+      background: #ffffff;
+      animation-delay: 0.18s;
+    }
+
+    .dot-loader span:nth-child(3) {
+      background: #25f4ee;
+      animation-delay: 0.36s;
+    }
+
+    @keyframes bounceDot {
+      0%,80%,100% { transform: translateY(0); opacity: 0.4; }
+      40%         { transform: translateY(-7px); opacity: 1; }
+    }
+
+    /* ===== 结果页 ===== */
+    .result-screen {
+      padding: 10px 4px 4px;
+      text-align: centre;
+    }
+
+    .result-badge {
+      display: inline-flex;
+      align-items: centre;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.3);
+      background: rgba(0,0,0,0.6);
+      font-size: 0.82rem;
+      margin-bottom: 8px;
+    }
+
+    .result-title {
+      font-size: 1.18rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .result-sub {
+      font-size: 0.9rem;
+      colour: #d3d8ff;
+      margin-bottom: 10px;
+    }
+
+    .result-image-wrap {
+      max-width: 360px;
+      margin: 0 auto 10px;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.16);
+      box-shadow:
+        0 16px 40px rgba(0,0,0,0.95),
+        0 0 18px rgba(37,244,238,0.5);
+      animation: zoomIn 0.8s ease-out;
+    }
+
+    .result-image {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    @keyframes zoomIn {
+      from { transform: scale(0.9); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+
+    .result-copy {
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+      colour: #eef1ff;
+    }
+
+    .secondary-btn {
+      border-radius: 999px;
+      border: none;
+      padding: 9px 18px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      background: #ffffff;
+      colour: #050711;
+      cursor: pointer;
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.6),
+        0 10px 22px rgba(0,0,0,0.95);
+    }
+
+    .secondary-btn:hover {
+      filter: brightness(0.96);
+    }
+
+    .claim-message {
+      margin-top: 10px;
+      font-size: 0.88rem;
+      colour: #d7e1ff;
+      display: none;
+    }
+
+    .claim-message.visible {
+      display: block;
+      animation: cardIn 0.6s ease-out;
+    }
+
+    /* ===== 已抽奖提示页 ===== */
+    .completed-screen {
+      padding: 20px 6px 4px;
+      text-align: centre;
+    }
+
+    .completed-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .completed-body {
+      font-size: 0.9rem;
+      colour: #dde4ff;
+    }
+
+    /* ===== 五彩纸屑 ===== */
+    .confetti {
+      position: fixed;
+      top: -10px;
+      width: 8px;
+      height: 14px;
+      border-radius: 2px;
+      opacity: 0.95;
+      pointer-events: none;
+      z-index: 50;
+      animation: confettiFall 3.2s linear forwards;
+    }
+
+    @keyframes confettiFall {
+      0%   { transform: translate3d(0,0,0) rotateZ(0deg); }
+      100% { transform: translate3d(0,110vh,0) rotateZ(360deg); }
     }
   </style>
 </head>
 <body>
-  <div id="container" class="container">
-    <!-- Initial section: title, event info, prize list, signature area -->
-    <div id="initial-section">
-      <h1>TikTok • WINTER PRESTIGE REWARDS</h1>
-      <div class="event-info">
-        <p>Event Period: 17 November 2025 — 17 January 2026</p>
-        <p>Complete the special “Friendly Heart” Challenge 3 to reach Premium Member Level 3 and claim your prize.</p>
-      </div>
-      <!-- Prize list with images and descriptions -->
-      <div class="prize-item">
-        <img src="images/prize1.png" alt="Fortnum & Mason Royal Tea & Teaware Collection">
-        <p>1️⃣. Fortnum & Mason Royal Tea & Teaware Collection</p>
-      </div>
-      <div class="prize-item">
-        <img src="images/prize2.png" alt="Home & Office High-End Tech Lineup">
-        <p>2️⃣. Home & Office High-End Tech Lineup</p>
-      </div>
-      <div class="prize-item">
-        <img src="images/prize3.png" alt="La Mer / Lancôme Winter Skincare Collection">
-        <p>3️⃣. La Mer / Lancôme Winter Skincare Collection</p>
-      </div>
-      <div class="prize-item">
-        <img src="images/prize4.png" alt="British Luxury Accessories Gift Set">
-        <p>4️⃣. British Luxury Accessories Gift Set</p>
-      </div>
-      <div class="prize-item">
-        <img src="images/prize5.png" alt="Mystery Grand Prize">
-        <p>5️⃣. Mystery Grand Prize</p>
-      </div>
-      <!-- Signature section -->
-      <div class="signature-section">
-        <p class="sig-instruction">Please sign in the box below to confirm participation:</p>
-        <canvas id="sig-canvas" width="300" height="100"></canvas>
-        <div class="sig-confirm">
-          <label><input type="checkbox" id="confirmCheck"> Confirm Signature</label>
-        </div>
-        <button id="startBtn" disabled>Start Draw</button>
-      </div>
-    </div>
-    <!-- Result section (hidden until lottery starts) -->
-    <div id="result-section" style="display:none; text-align:center;">
-      <div id="waiting">
-        <div class="spinner"></div>
-        <p class="drawing-text">Drawing...</p>
-      </div>
-      <div id="prize-display" style="display:none;">
-        <img id="prize-img" src="images/prize5.png" alt="Mystery Grand Prize — iPhone 17 Pro MAX (2TB)">
-        <p id="prize-name">Mystery Grand Prize — iPhone 17 Pro MAX (2TB)</p>
-        <button id="confirmPrizeBtn">Confirm Prize</button>
-      </div>
-      <div id="final-message" style="display:none;">
-        <p>Congratulations, dear! Now please contact your dedicated attendant on Telegram with the details of your prize. Complete the required challenge to reach Premium Member Level 4 to claim your reward.</p>
-      </div>
-    </div>
+  <!-- 背景层 -->
+  <div class="bg-layer">
+    <div class="orb orb--pink"></div>
+    <div class="orb orb--cyan"></div>
+    <div class="orb orb--white"></div>
   </div>
-  <!-- Already-done message (for repeat visitors who already drew once) -->
-  <div id="already-done">
-    <p>Dear, you have already completed the prize draw.<br>Your prize is an iPhone 17 Pro MAX (2TB).<br>Please contact your attendant and complete the required tasks to claim your prize.</p>
+  <div class="grid"></div>
+  <div class="scanline"></div>
+
+  <!-- 主内容 -->
+  <div class="outer">
+    <div class="card">
+      <div class="card-inner">
+        <header class="header">
+          <div class="logo-pill">
+            <div class="logo-dot"></div>
+            <span>TIKTOK PRESTIGE</span>
+          </div>
+          <h1 class="title">
+            TikTok<span class="dot"> • </span>WINTER PRESTIGE REWARDS
+          </h1>
+          <p class="subtitle">
+            A one-off winter experience for TikTok members across the United Kingdom.
+          </p>
+        </header>
+
+        <!-- Step 1: 奖品 + 签名 -->
+        <section id="step-intro" class="step active">
+          <div class="prize-grid">
+            <article class="prize-card" data-index="1️⃣">
+              <span class="prize-index">1️⃣</span>
+              <h2 class="prize-title">Fortnum &amp; Mason Royal Tea &amp; Teaware Collection</h2>
+              <div class="prize-image-wrap">
+                <img class="prize-image" src="prize1.jpg" alt="Fortnum & Mason Royal Tea & Teaware Collection">
+              </div>
+              <p class="prize-note">
+                <span class="note-dot"></span>
+                Curated British tea moments for calm winter afternoons.
+              </p>
+            </article>
+
+            <article class="prize-card" data-index="2️⃣">
+              <span class="prize-index">2️⃣</span>
+              <h2 class="prize-title">Home &amp; Office High-End Tech Lineup</h2>
+              <div class="prize-image-wrap">
+                <img class="prize-image" src="prize2.jpg" alt="Home & Office High-End Tech Lineup">
+              </div>
+              <p class="prize-note">
+                <span class="note-dot"></span>
+                Smart devices to elevate both your workday and your downtime.
+              </p>
+            </article>
+
+            <article class="prize-card" data-index="3️⃣">
+              <span class="prize-index">3️⃣</span>
+              <h2 class="prize-title">La Mer / Lancôme Winter Skincare Collection</h2>
+              <div class="prize-image-wrap">
+                <img class="prize-image" src="prize3.jpg" alt="La Mer / Lancôme Winter Skincare Collection">
+              </div>
+              <p class="prize-note">
+                <span class="note-dot"></span>
+                A winter care ritual designed for a soft, luminous complexion.
+              </p>
+            </article>
+
+            <article class="prize-card" data-index="4️⃣">
+              <span class="prize-index">4️⃣</span>
+              <h2 class="prize-title">British Luxury Accessories Gift Set</h2>
+              <div class="prize-image-wrap">
+                <img class="prize-image" src="prize4.jpg" alt="British Luxury Accessories Gift Set">
+              </div>
+              <p class="prize-note">
+                <span class="note-dot"></span>
+                Elegant pieces to complete a distinctly British look.
+              </p>
+            </article>
+
+            <article class="prize-card" data-index="5️⃣">
+              <span class="prize-index">5️⃣</span>
+              <h2 class="prize-title">Mystery Grand Prize</h2>
+              <div class="prize-image-wrap">
+                <img class="prize-image" src="prize5.jpg" alt="Mystery Grand Prize">
+              </div>
+              <p class="prize-note">
+                <span class="note-dot"></span>
+                One reserved reward for our winter prestige winner.
+              </p>
+            </article>
+          </div>
+
+          <div class="event-info">
+            Event Period: 17 November 2025 — 17 January 2026. Complete the Special “Friendly Heart” Challenge&nbsp;3 to become a Premium Member&nbsp;3 and claim your reward.
+          </div>
+
+          <div class="signature-block">
+            <p class="sig-title">Signature for entry</p>
+            <p class="sig-help">
+              Please sign inside the box using your fingertip on mobile or your mouse on desktop.
+            </p>
+            <canvas id="signaturePad"></canvas>
+
+            <div class="sig-footer">
+              <label class="confirm-area">
+                <input type="checkbox" id="confirmCheck">
+                <span>Confirm signature</span>
+              </label>
+              <button type="button" class="clear-btn" id="clearSigBtn">Clear signature</button>
+            </div>
+
+            <button id="startBtn" class="primary-btn" disabled>
+              Start draw
+            </button>
+          </div>
+
+          <p class="foot-note">
+            Each person may enter this winter draw once only. Thank you for being part of our TikTok community.
+          </p>
+        </section>
+
+        <!-- Step 2: 抽奖等待页 -->
+        <section id="step-draw" class="step">
+          <div class="draw-screen">
+            <div class="draw-spinner-wrap">
+              <div class="ring r1"></div>
+              <div class="ring r2"></div>
+              <div class="ring r3"></div>
+            </div>
+            <p class="draw-title">Securing your Winter Prestige reward…</p>
+            <p class="draw-sub">
+              Please hold for a moment whilst we complete the draw.
+            </p>
+            <div class="dot-loader">
+              <span></span><span></span><span></span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Step 3: 抽奖结果页 -->
+        <section id="step-result" class="step">
+          <div class="result-screen">
+            <div class="result-badge">
+              <span>🎉</span>
+              <span>Official reward reveal</span>
+            </div>
+            <h2 class="result-title">Mystery Grand Prize unlocked</h2>
+            <p class="result-sub">
+              Your winter reward has been confirmed and locked to your profile.
+            </p>
+
+            <div class="result-image-wrap">
+              <img
+                id="resultImage"
+                class="result-image"
+                src="prize5.jpg"
+                alt="iPhone 17 Pro MAX 2TB"
+              >
+            </div>
+
+            <p id="resultCopy" class="result-copy">
+              Congratulations. You have received the Mystery Grand Prize:
+              <strong>iPhone&nbsp;17 Pro MAX&nbsp;2TB</strong>.
+            </p>
+
+            <button id="claimBtn" class="secondary-btn">
+              Confirm prize
+            </button>
+
+            <p id="claimMessage" class="claim-message">
+              Congratulations, dear. Please contact your dedicated concierge on Telegram with the details of your prize. Once you have completed the challenge and reached Prestige Level&nbsp;4, you will be able to collect your reward.
+            </p>
+          </div>
+        </section>
+
+        <!-- Step 4: 已完成抽奖提示 -->
+        <section id="step-completed" class="step">
+          <div class="completed-screen">
+            <p class="completed-title">Prize draw already completed</p>
+            <p class="completed-body">
+              Dear, you have already taken part in this draw.<br>
+              Your prize is the <strong>iPhone&nbsp;17 Pro MAX&nbsp;2TB</strong>.<br>
+              Please contact your concierge on Telegram and complete the remaining tasks to receive your reward.
+            </p>
+          </div>
+        </section>
+      </div>
+    </div>
   </div>
 
-  <!-- Include canvas-confetti library for confetti effect -->
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.min.js"></script>
   <script>
-    // Signature drawing setup
-    const canvas = document.getElementById('sig-canvas');
-    const ctx = canvas.getContext('2d');
-    let drawing = false;
-    let signed = false;
-    let lastX = 0, lastY = 0;
-    let moved = false;
+    // ===== 基本状态 =====
+    const STORAGE_KEY = "tiktokWinterPrestigeDrawDone";
+    let hasSigned = false;
+    let drawCompleted = false;
 
-    // Adjust canvas size to fit container width (responsive)
+    // 步骤 DOM
+    const stepIntro = document.getElementById("step-intro");
+    const stepDraw = document.getElementById("step-draw");
+    const stepResult = document.getElementById("step-result");
+    const stepCompleted = document.getElementById("step-completed");
+
+    function showStep(stepEl) {
+      [stepIntro, stepDraw, stepResult, stepCompleted].forEach(el => el.classList.remove("active"));
+      stepEl.classList.add("active");
+    }
+
+    // ===== 签名板 =====
+    const canvas = document.getElementById("signaturePad");
+    const ctx = canvas.getContext("2d");
+    const confirmCheck = document.getElementById("confirmCheck");
+    const clearSigBtn = document.getElementById("clearSigBtn");
+    const startBtn = document.getElementById("startBtn");
+
     function resizeCanvas() {
-      const container = document.getElementById('container');
-      if (container) {
-        canvas.width = container.clientWidth * 0.9;
-        canvas.height = canvas.width / 3;  // 3:1 aspect ratio for signature box
-      }
-    }
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
-
-    // Get relative coordinates for mouse or touch events on the canvas
-    function getCanvasCoords(e) {
       const rect = canvas.getBoundingClientRect();
-      if (e.touches && e.touches[0]) {
-        return {
-          x: e.touches[0].clientX - rect.left,
-          y: e.touches[0].clientY - rect.top
-        };
-      } else {
-        return {
-          x: e.offsetX,
-          y: e.offsetY
-        };
-      }
-    }
-
-    // Start drawing (begin new signature stroke)
-    function startDraw(e) {
-      e.preventDefault();
-      drawing = true;
-      moved = false;
-      const coords = getCanvasCoords(e);
-      lastX = coords.x;
-      lastY = coords.y;
-      ctx.beginPath();
-      ctx.moveTo(lastX, lastY);
-    }
-
-    // Draw line (continue signature stroke)
-    function draw(e) {
-      if (!drawing) return;
-      e.preventDefault();
-      const coords = getCanvasCoords(e);
-      const x = coords.x;
-      const y = coords.y;
+      const ratio = window.devicePixelRatio || 1;
+      canvas.width = rect.width * ratio;
+      canvas.height = rect.height * ratio;
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
       ctx.lineWidth = 2;
-      ctx.strokeStyle = '#000000';  // black ink
-      ctx.lineTo(x, y);
-      ctx.stroke();
-      lastX = x;
-      lastY = y;
-      moved = true;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.strokeStyle = "#000000";
     }
 
-    // End drawing (finish signature stroke)
-    function endDraw(e) {
+    let drawing = false;
+
+    function pointerPos(ev) {
+      const rect = canvas.getBoundingClientRect();
+      return {
+        x: ev.clientX - rect.left,
+        y: ev.clientY - rect.top
+      };
+    }
+
+    function handlePointerDown(ev) {
+      if (drawCompleted) return;
+      drawing = true;
+      hasSigned = true;
+      const pos = pointerPos(ev);
+      ctx.beginPath();
+      ctx.moveTo(pos.x, pos.y);
+      updateStartButton();
+    }
+
+    function handlePointerMove(ev) {
       if (!drawing) return;
-      e.preventDefault();
+      const pos = pointerPos(ev);
+      ctx.lineTo(pos.x, pos.y);
+      ctx.stroke();
+    }
+
+    function handlePointerUp() {
+      if (!drawing) return;
       drawing = false;
-      // If no movement occurred, draw a small dot at the point
-      if (!moved) {
-        ctx.beginPath();
-        ctx.arc(lastX, lastY, 1, 0, 2 * Math.PI);
-        ctx.fillStyle = '#000000';
-        ctx.fill();
-      }
-      // Mark that the user has signed
-      signed = true;
-      // Enable "Start Draw" button if signature is done and checkbox is checked
-      if (document.getElementById('confirmCheck').checked) {
-        document.getElementById('startBtn').disabled = false;
+      ctx.closePath();
+    }
+
+    function clearSignature() {
+      const rect = canvas.getBoundingClientRect();
+      ctx.clearRect(0, 0, rect.width, rect.height);
+      hasSigned = false;
+      updateStartButton();
+    }
+
+    function updateStartButton() {
+      if (drawCompleted) {
+        startBtn.disabled = true;
+      } else {
+        startBtn.disabled = !(hasSigned && confirmCheck.checked);
       }
     }
 
-    // Event listeners for canvas (mouse and touch)
-    canvas.addEventListener('mousedown', startDraw);
-    canvas.addEventListener('mousemove', draw);
-    canvas.addEventListener('mouseup', endDraw);
-    canvas.addEventListener('mouseleave', endDraw);
-    canvas.addEventListener('touchstart', startDraw, { passive: false });
-    canvas.addEventListener('touchmove', draw, { passive: false });
-    canvas.addEventListener('touchend', endDraw);
+    // ===== 抽奖流程 =====
+    function startDraw() {
+      if (startBtn.disabled || drawCompleted) return;
 
-    // Checkbox event: enable/disable Start button based on conditions
-    document.getElementById('confirmCheck').addEventListener('change', function() {
-      if (this.checked && signed) {
-        document.getElementById('startBtn').disabled = false;
-      } else {
-        document.getElementById('startBtn').disabled = true;
+      // 标记已完成（限制只能一次）
+      localStorage.setItem(STORAGE_KEY, "true");
+      drawCompleted = true;
+
+      showStep(stepDraw);
+
+      // 2.6s 后展示结果
+      setTimeout(() => {
+        showStep(stepResult);
+        launchConfetti();
+      }, 2600);
+    }
+
+    // ===== 五彩纸屑 =====
+    function launchConfetti() {
+      const colours = ["#fe2c55", "#25f4ee", "#ffffff", "#ffd65c"];
+      const pieces = 80;
+
+      for (let i = 0; i < pieces; i++) {
+        const c = document.createElement("div");
+        c.className = "confetti";
+        c.style.backgroundColor = colours[Math.floor(Math.random() * colours.length)];
+        c.style.left = Math.random() * 100 + "vw";
+        const delay = Math.random() * 0.7;
+        const duration = 2.4 + Math.random() * 1.1;
+        c.style.animationDelay = delay + "s";
+        c.style.animationDuration = duration + "s";
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), (duration + delay + 0.5) * 1000);
       }
-    });
+    }
 
-    // "Start Draw" button event: begin the lottery
-    document.getElementById('startBtn').addEventListener('click', function() {
-      // Mark lottery as done in localStorage (to prevent multiple entries)
-      localStorage.setItem('lotteryDone', 'true');
-      // Hide initial content and show the result section
-      document.getElementById('initial-section').style.display = 'none';
-      document.getElementById('result-section').style.display = 'block';
-      // After a brief animation delay (2.5s), show the prize result
-      setTimeout(function() {
-        document.getElementById('waiting').style.display = 'none';
-        document.getElementById('prize-display').style.display = 'block';
-        // Using canvas-confetti library for confetti effect
-        confetti({
-          particleCount: 100,
-          spread: 70,
-          origin: { y: 0.6 },
-          colors: ['#EE1D52', '#69C9D0', '#ffffff']
-        });
-      }, 2500);
-    });
+    // ===== 领取按钮 =====
+    const claimBtn = document.getElementById("claimBtn");
+    const claimMessage = document.getElementById("claimMessage");
 
-    // "Confirm Prize" button event: show final congratulations message
-    document.getElementById('confirmPrizeBtn').addEventListener('click', function() {
-      document.getElementById('prize-display').style.display = 'none';
-      document.getElementById('final-message').style.display = 'block';
-    });
+    function handleClaim() {
+      claimBtn.disabled = true;
+      claimMessage.classList.add("visible");
+    }
 
-    // On page load, check if this user already completed the draw before
-    window.addEventListener('load', function() {
-      if (localStorage.getItem('lotteryDone') === 'true') {
-        // Already participated: skip to the message
-        document.getElementById('container').style.display = 'none';
-        document.getElementById('already-done').style.display = 'block';
+    // ===== 初始化 =====
+    window.addEventListener("DOMContentLoaded", () => {
+      // 是否已抽奖
+      drawCompleted = localStorage.getItem(STORAGE_KEY) === "true";
+
+      if (drawCompleted) {
+        showStep(stepCompleted);
       } else {
-        // First time: show the main content
-        document.getElementById('container').style.display = 'block';
+        showStep(stepIntro);
       }
+
+      // 设置签名板尺寸
+      resizeCanvas();
+      window.addEventListener("resize", resizeCanvas);
+
+      canvas.addEventListener("pointerdown", handlePointerDown);
+      canvas.addEventListener("pointermove", handlePointerMove);
+      canvas.addEventListener("pointerup", handlePointerUp);
+      canvas.addEventListener("pointerleave", handlePointerUp);
+      canvas.addEventListener("pointercancel", handlePointerUp);
+
+      confirmCheck.addEventListener("change", updateStartButton);
+      clearSigBtn.addEventListener("click", clearSignature);
+      startBtn.addEventListener("click", startDraw);
+      claimBtn.addEventListener("click", handleClaim);
+
+      updateStartButton();
     });
   </script>
 </body>
